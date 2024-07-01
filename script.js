@@ -8,8 +8,8 @@ play.addEventListener("click", () => {
 Tone.start();
 
 let synth = new Tone.Synth({
-  oscillator: { type: "sine"},
-  envelope: { attack: 0, decay: 0, sustain: 1, release: 0},
+  oscillator: { type: "square"},
+  envelope: { attack: 0.8, decay: 0.3, sustain: 0.8, release: 1},
   volume: -6
 }).toDestination();
 
