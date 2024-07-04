@@ -35,5 +35,8 @@
         "1:1:0" represents the second beat of the second bar, and
         "6:3:2" refers to the third sixteenth note of the fourth beat in the seventh bar.
       - We refer to these strings as **bars:quarters:sixteenths notation**.
-## Tone.Loop
+    ## Tone.Loop
+    - The Tone.js transport gives us an easy way to define musical loops, including when they start and when they finish.
+    - The simplest of these, Tone.Loop, defines a way to constantly produce new notes.
+
   
