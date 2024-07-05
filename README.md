@@ -65,3 +65,13 @@
      - To mimic this, we'll use two separate sound sources; a noise synth and a regular synth with a fixed frequency.
      - Both will have a short amplitude envelope to create a percussive feel, and we'll also pass the noise component of the sound through a bandpass
      filter to make the snare lower than the hi-hat.
+
+    ### Kick Synthesis
+     - A kick drum is much larger than a snare drum, and it doesn't have the rattling snare to make it sound noisy -- The sound of a kick drum is fairly
+     complex, but luckily Tone.js has a synth called a -MembraneSynth- that mimics it quite well. 
+     - This synth takes a regular oscillator and lowers its frequency over a short period of time, which ends up sounding a lot like a kick drum when set up correctly.
+     #### Reverb
+      - *Reverb* (short for **reverberation**) is an effect that makes music sound like it's being played in a room or larger enclosed space.
+      - The random echoes that real-world sounds make as they bounce around the walls of a room are what give this reverb effect.
+      - Reverb makes each sound take a little time to die away, and it will make our drums sound a bit more realistic.
+      - We can add reverb with -Tone.Reverb- 

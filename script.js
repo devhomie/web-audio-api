@@ -51,5 +51,15 @@ new Tone.Loop(time =>{
   snare.triggerAttackRelease("16n", time);
 }, "2n").start("0:1:0").stop("4:0:0");
 
+let kick = new Tone.MembraneSynth({
+  pitchDecay: 0.02,
+  octaves: 6,
+  volume: -9
+}).connect(reverb);
+
+new Tone.Loop(time => {
+  kick.triggerAttackRelease(50, "16n", time);
+},"2n").start("0:0:0").stop("4:0:0");
+
 Tone.Transport.start();
 });
