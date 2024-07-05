@@ -58,4 +58,10 @@
       - We'll give the **NoiseSynth** an amplitude envelope that simulates the abrupt attacks of hitting the hi-hat with a stick.
       - Finally, we'll pass the noise through a *filter*, a device that allows through some frequencies while reducing the level of others --
       to remove the low frequencies and make it sound higher and more cymbal-like.
-      
+    
+    ### Snare Synthesis
+     - A snare drum has a series of wires (known as the snare) resting against the bottom drumhead that rattle against the drumhead when the drum 
+     is hit. -- This gives it a relatively complex sound, composed of some noise and some more pitched sound.
+     - To mimic this, we'll use two separate sound sources; a noise synth and a regular synth with a fixed frequency.
+     - Both will have a short amplitude envelope to create a percussive feel, and we'll also pass the noise component of the sound through a bandpass
+     filter to make the snare lower than the hi-hat.
