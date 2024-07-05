@@ -41,9 +41,9 @@ let hiHat = new Tone.NoiseSynth({
   volume: -6
 }).connect(hiHatFilter);
 
-new Tone.Loop(time => {
+new Tone.Sequence(time => {
   hiHat.triggerAttackRelease("16n", time);
-}, "8n").start("0:0:0").stop("4:0:0");
+}, mkSequence(drumPattern.hiHat), "8n").start("0:0:0").stop("4:0:0");
 
 class Snare{
   constructor(){
@@ -72,9 +72,9 @@ class Snare{
 
 let snare = new Snare();
 
-new Tone.Loop(time =>{
+new Tone.Sequence(time => {
   snare.triggerAttackRelease("16n", time);
-}, "2n").start("0:1:0").stop("4:0:0");
+}, mkSequence(drumPattern.snare), "8n").start("0:0:0").stop("4:0:0");
 
 let kick = new Tone.MembraneSynth({
   pitchDecay: 0.02,
@@ -82,9 +82,9 @@ let kick = new Tone.MembraneSynth({
   volume: -9
 }).connect(reverb);
 
-new Tone.Loop(time => {
+new Tone.Sequence(time => {
   kick.triggerAttackRelease(50, "16n", time);
-},"2n").start("0:0:0").stop("4:0:0");
+}, mkSequence(drumPattern.kick), "8n").start("0:0:0").stop("4:0:0");
 
 Tone.Transport.start();
 });
