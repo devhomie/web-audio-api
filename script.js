@@ -7,6 +7,24 @@ play.addEventListener("click", () => {
 
 Tone.start();
 
+// Converts a string to an array of notes or null. 
+// Dots in the string become nulls in the array and are silent.
+function mkSequence(pattern){
+  return pattern.split("").map(value=>{
+    if(value == "."){
+      return null;
+    } else {
+      return value;
+    }
+  })
+}
+
+let drumPattern = {
+  kick: "x...x...",
+  snare: "..x...x.",
+  hiHat: "xxxxxxxx",
+};
+
 let reverb = new Tone.Reverb({
   decay: 1,
   wet: 0.3
