@@ -35,11 +35,7 @@ function mkDrums(){
         volume: -12
       }).connect(reverb);
     }
-
-    triggerAttackRelease(duration, when){
-      this.noiseSynth.triggerAttackRelease(duration, when);
-      this.synth.triggerAttackRelease("G3", duration, when);
-    }
+    
   }
 
 
