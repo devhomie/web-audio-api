@@ -86,5 +86,24 @@ new Tone.Sequence(time => {
   kick.triggerAttackRelease(50, "16n", time);
 }, mkSequence(drumPattern.kick), "8n").start("0:0:0").stop("4:0:0");
 
+// Samples from freesound.org:
+// https//freesound.org/people/MTG/sounds/357432/
+// https//freesound.org/people/MTG/sounds/357336/
+// https//freesound.org/people/MTG/sounds/357546/
+const sampler = new Tone.Sampler({
+  urls: {
+    "C5": "trumpet-c5.mp3",
+    "D5": "trumpet-d5.mp3",
+    "F5": "trumpet-f5.mp3"
+  },
+  baseUrl: "https://skilldrick-jscc.s3.us-west-2.amazonaws.com/",
+  attack: 0,
+  release: 1,
+  volume: -24,
+  onload: () => {
+    sampler.triggerAttackRelease(["C5", "E5", "G5"], "1n", 0);
+  }
+}).toDestination();
+
 Tone.Transport.start();
 });
