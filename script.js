@@ -7,7 +7,14 @@ play.addEventListener("click", () => {
 
 Tone.start();
 
-let hiHatFilter = new Tone.Filter(15000, "bandpass").toDestination();
+let reverb = new Tone.Reverb({
+  decay: 1,
+  wet: 0.3
+}).toDestination();
+
+
+
+let hiHatFilter = new Tone.Filter(15000, "bandpass").connect(reverb);
 
 let hiHat = new Tone.NoiseSynth({
   envelope: {
@@ -22,7 +29,7 @@ new Tone.Loop(time => {
 
 class Snare{
   constructor(){
-    this.noiseFilter = new Tone.Filter(5000, "bandpass").toDestination();
+    this.noiseFilter = new Tone.Filter(5000, "bandpass").connect(reverb);
     this.noiseSynth = new Tone.NoiseSynth({
       envelope: {
         attack: 0.001, decay: 0.1, sustain: 0, release: 0
@@ -35,7 +42,7 @@ class Snare{
       },
       oscillator: {type: "sine"},
       volume: -12
-    }).toDestination();
+    }).connect(reverb);
   }
 
   triggerAttackRelease(duration, when){
