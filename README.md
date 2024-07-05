@@ -43,3 +43,19 @@
 ## Tone.Sequence
   - A another Tone.js *helper*, called **Tone.Sequence** -- Lets you provide a list of note names to be scheduled to play at
   regular intervals. -- You can repeat the whole sequence as many times as you want. 
+
+## Tone.NoiseSynth - Making Drum Sounds
+ - The core of a drum beat is built around three components: the **kick drum** (a "boom" sound), the **snare drum** (a "bah" sound),
+ and the **hi-hat** (a "ti" sound).
+
+    ### Hi-Hat Synthesis
+      - A real-world hi-hat is made up of two cymbals facing each other. The top cymbal is connected to a pedal so the drummer can make
+      the cymbals touch or move apart. 
+      - We're going for a closed (cymbals touching) sound here. When you hit closed hi-hats with a drum stick, they make a high-pitched
+      noise that quickly fades away.
+      - We'll approximate this by using a different kind of synth, a - **NoiseSynth** - , to generate white noise instead of notes with pitches.
+      - In signal processing, ***white noise*** is a random signal that has equal-level components at all frequencies.
+      - We'll give the **NoiseSynth** an amplitude envelope that simulates the abrupt attacks of hitting the hi-hat with a stick.
+      - Finally, we'll pass the noise through a *filter*, a device that allows through some frequencies while reducing the level of others --
+      to remove the low frequencies and make it sound higher and more cymbal-like.
+      
