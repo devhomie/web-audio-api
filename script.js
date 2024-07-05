@@ -7,21 +7,11 @@ play.addEventListener("click", () => {
 
 Tone.start();
 
-let synth = new Tone.PolySynth(Tone.Synth, {
-  oscillator: {type: "triangle"},
-  volume: -9
-}).toDestination();
+let synth = new Tone.Synth().toDestination();
 
-let notes = ["C4", "D4", "E4", "G4", "A4", "C5"];
-
-new Tone.Loop(time =>{
-  for (let i = 0; i < 3; i++){
-    if(Math.random() < 0.5){
-      let note = notes[Math.floor(Math.random() * notes.length)];
-      synth.triggerAttackRelease(note, "32n", time);
-    }
-  }
-}, "8n").start("0:0:0").stop("8:0:0");
+new Tone.Sequence((time, note) =>{
+  synth.triggerAttackRelease(note, "16n", time);
+}, ["G4", "C4", "C4", "C4"], "4n").start("0:0:0").stop("4:0:0");
 
 Tone.Transport.start();
 });

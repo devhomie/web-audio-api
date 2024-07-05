@@ -39,4 +39,7 @@
     - The Tone.js transport gives us an easy way to define musical loops, including when they start and when they finish.
     - The simplest of these, Tone.Loop, defines a way to constantly produce new notes.
 
-  
+
+## Tone.Sequence
+  - A another Tone.js *helper*, called **Tone.Sequence** -- Lets you provide a list of note names to be scheduled to play at
+  regular intervals. -- You can repeat the whole sequence as many times as you want. 
