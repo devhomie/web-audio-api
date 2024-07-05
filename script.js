@@ -1,22 +1,79 @@
-let play = document.querySelector("#play");
-let playing = document.querySelector("#playing");
-play.addEventListener("click", () => {
-  //Hide this button
-  play.style = "display: none";
-  playing.style = "";
+//////////////////////////////////////////////////////////////////////
+//           Instruments 
+//////////////////////////////////////////////////////////////////////
 
-Tone.start();
+function mkDrums(){
+  let reverb = new Tone.Reverb({
+    decay: 1,
+    wet: 0.3
+  }).toDestination();
 
-// Converts a string to an array of notes or null. 
+  let hiHatFilter = new Tone.Filter(15000, "bandpass").connect(reverb);
+
+  let hiHat = new Tone.NoiseSynth({
+    envelope: {
+      attack: 0.001, decay: 0.1, sustain: 0, release: 0
+    },
+    volume: -6
+  }).connect(hiHatFilter);
+
+  class Snare {
+    constuctor(){
+      this.noiseFilter = new Tone.Filter(5000, "bandpass").connect(reverb);
+      this.noiseSynth = new Tone.NoiseSynth({
+        envelope:{
+          attack: 0.001, decay: 0.1, sustain: 0, release: 0
+        },
+        volume: -12
+      }).connect(this.noiseFilter);
+      
+      this.synth = new Tone.Synth({
+        envelope: {
+          attack: 0.0001, decay: 0.1, sustain: 0, release: 0
+        },
+        oscillator: {type: "sine"},
+        volume: -12
+      }).connect(reverb);
+    }
+
+    triggerAttackRelease(duration, when){
+      this.noiseSynth.triggerAttackRelease(duration, when);
+      this.synth.triggerAttackRelease("G3", duration, when);
+    }
+  }
+
+
+  let snare = new Snare();
+
+  let kick = new Tone.MembraneSynth({
+    pitchDecay: 0.02,
+    octaves: 6,
+    volume: -9
+  }).connect(reverb);
+  
+  return { hiHat, snare, kick};
+}
+
+
+let drums = mkDrums();
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+//            Sequencing
+//////////////////////////////////////////////////////////////////////
+
+// Converts a string to an array of notes or nulls
 // Dots in the string become nulls in the array and are silent.
 function mkSequence(pattern){
-  return pattern.split("").map(value=>{
-    if(value == "."){
+  return pattern.split("").map(value =>{
+    if (value == "."){
       return null;
     } else {
       return value;
     }
-  })
+  });
 }
 
 let drumPattern = {
@@ -25,85 +82,43 @@ let drumPattern = {
   hiHat: "xxxxxxxx",
 };
 
-let reverb = new Tone.Reverb({
-  decay: 1,
-  wet: 0.3
-}).toDestination();
+let hiHatSequence = new Tone.Sequence(time => {
+  drums.hiHat.triggerAttackRelease("16n", time);
+}, mkSequence(drumPattern.hiHat), "8n");
+
+let snareSequence = new Tone.Sequence(time =>{
+  drums.snare.triggerAttackRelease("16n", time);
+}, mkSequence(drumPattern.snare), "8n");
+
+let kickSequence = new Tone.Sequence(time => {
+  drums.kick.triggerAttackRelease(50, "16n", time);
+}, mkSequence(drumPattern.kick), "8n");
+
+//////////////////////////////////////////////////////////////////////
+//            Song  
+//////////////////////////////////////////////////////////////////////
+
+hiHatSequence.start("0:0:0").stop("44:0:0");
+snareSequence.start("0:0:0").stop("44:0:0");
+kickSequence.start("0:0:0").stop("44:0:0")
 
 
+//////////////////////////////////////////////////////////////////////
+//            Event Handling
+//////////////////////////////////////////////////////////////////////
 
-let hiHatFilter = new Tone.Filter(15000, "bandpass").connect(reverb);
+let play = document.querySelector("#play");
+let playing = document.querySelector("#playing");
 
-let hiHat = new Tone.NoiseSynth({
-  envelope: {
-    attack: 0.001, decay: 0.1, sustain: 0, release: 0
-  },
-  volume: -6
-}).connect(hiHatFilter);
+play.addEventListener("click", () => {
+  // Hide this button
+  play.style = "display: none";
+  playing.style = "";
 
-new Tone.Sequence(time => {
-  hiHat.triggerAttackRelease("16n", time);
-}, mkSequence(drumPattern.hiHat), "8n").start("0:0:0").stop("4:0:0");
+  Tone.start();
 
-class Snare{
-  constructor(){
-    this.noiseFilter = new Tone.Filter(5000, "bandpass").connect(reverb);
-    this.noiseSynth = new Tone.NoiseSynth({
-      envelope: {
-        attack: 0.001, decay: 0.1, sustain: 0, release: 0
-      },
-      volume: -12
-    }).connect(this.noiseFilter);
-    this.synth = new Tone.Synth({
-      envelope: {
-        attack: 0.0001, decay: 0.1, sustain: 0, release: 0
-      },
-      oscillator: {type: "sine"},
-      volume: -12
-    }).connect(reverb);
-  }
+  // Modify this to start playback at a different part of the song
+  Tone.Transport.position = " 0:0:0";
+  Tone.Transport.start();
 
-  triggerAttackRelease(duration, when){
-    this.noiseSynth.triggerAttackRelease(duration, when);
-    this.synth.triggerAttackRelease("G3", duration, when);
-  }
-
-}
-
-let snare = new Snare();
-
-new Tone.Sequence(time => {
-  snare.triggerAttackRelease("16n", time);
-}, mkSequence(drumPattern.snare), "8n").start("0:0:0").stop("4:0:0");
-
-let kick = new Tone.MembraneSynth({
-  pitchDecay: 0.02,
-  octaves: 6,
-  volume: -9
-}).connect(reverb);
-
-new Tone.Sequence(time => {
-  kick.triggerAttackRelease(50, "16n", time);
-}, mkSequence(drumPattern.kick), "8n").start("0:0:0").stop("4:0:0");
-
-// Samples from freesound.org:
-// https//freesound.org/people/MTG/sounds/357432/
-// https//freesound.org/people/MTG/sounds/357336/
-// https//freesound.org/people/MTG/sounds/357546/
-const sampler = new Tone.Sampler({
-  urls: {
-    "C5": "trumpet-c5.mp3",
-    "D5": "trumpet-d5.mp3",
-    "F5": "trumpet-f5.mp3"
-  },
-  baseUrl: "https://skilldrick-jscc.s3.us-west-2.amazonaws.com/",
-  attack: 0,
-  release: 1,
-  volume: -24,
-  onload: () => {
-    sampler.triggerAttackRelease(["C5", "E5", "G5"], "1n", 0);
-  }
-}).toDestination();
-
-Tone.Transport.start();
 });
