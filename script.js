@@ -7,12 +7,14 @@ play.addEventListener("click", () => {
 
 Tone.start();
 
+let hiHatFilter = new Tone.Filter(15000, "bandpass").toDestination();
+
 let hiHat = new Tone.NoiseSynth({
   envelope: {
     attack: 0.001, decay: 0.1, sustain: 0, release: 0
   },
   volume: -6
-}).toDestination();
+}).connect(hiHatFilter);
 
 new Tone.Loop(time => {
   hiHat.triggerAttackRelease("16n", time);
